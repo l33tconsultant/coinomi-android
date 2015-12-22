@@ -29,6 +29,7 @@ import com.coinomi.core.coins.NuBitsMain;
 import com.coinomi.core.coins.NuSharesMain;
 import com.coinomi.core.coins.ParkbyteMain;
 import com.coinomi.core.coins.PeercoinMain;
+import com.coinomi.core.coins.PotcoinMain;
 import com.coinomi.core.coins.ReddcoinMain;
 import com.coinomi.core.coins.RubycoinMain;
 import com.coinomi.core.coins.ShadowCashMain;
@@ -171,7 +172,9 @@ public class Constants {
             new CoinAddress(DogecoindarkMain.get(), new ServerAddress("doged-cce-1.coinomi.net", 5036),
                                                     new ServerAddress("doged-cce-2.coinomi.net", 5036)),
             new CoinAddress(GcrMain.get(),          new ServerAddress("gcr-cce-1.coinomi.net", 5038),
-                                                    new ServerAddress("gcr-cce-2.coinomi.net", 5038))
+                                                    new ServerAddress("gcr-cce-2.coinomi.net", 5038)),
+            new CoinAddress(PotcoinMain.get(),      new ServerAddress("10.20.30.37", 50001),
+                                                    new ServerAddress("10.20.30.37", 50001))
     );
 
     public static final HashMap<CoinType, Integer> COINS_ICONS;
@@ -209,6 +212,7 @@ public class Constants {
         COINS_ICONS.put(CoinID.DOGECOINDARK_MAIN.getCoinType(), R.drawable.dogecoindark);
         COINS_ICONS.put(CoinID.CLAMS_MAIN.getCoinType(), R.drawable.clams);
         COINS_ICONS.put(CoinID.GCR_MAIN.getCoinType(), R.drawable.gcr);
+        COINS_ICONS.put(CoinID.POTCOIN_MAIN.getCoinType(), R.drawable.gcr);
 
         COINS_BLOCK_EXPLORERS = new HashMap<CoinType, String>();
         COINS_BLOCK_EXPLORERS.put(CoinID.BITCOIN_MAIN.getCoinType(), "https://blockchain.info/tx/%s");
@@ -243,6 +247,7 @@ public class Constants {
         COINS_BLOCK_EXPLORERS.put(CoinID.DOGECOINDARK_MAIN.getCoinType(), "http://darkchain.link/tx/%s");
         COINS_BLOCK_EXPLORERS.put(CoinID.CLAMS_MAIN.getCoinType(), "http://khashier.com/tx/%s");
         COINS_BLOCK_EXPLORERS.put(CoinID.GCR_MAIN.getCoinType(), "https://chainz.cryptoid.info/gcr/tx.dws?%s");
+        COINS_BLOCK_EXPLORERS.put(CoinID.POTCOIN_MAIN.getCoinType(), "https://chainz.cryptoid.info/pot/tx.dws?%s.htm");
     }
 
     public static final CoinType DEFAULT_COIN = BitcoinMain.get();
@@ -283,6 +288,7 @@ public class Constants {
             ParkbyteMain.get(),
             BitcoinTest.get(),
             LitecoinTest.get(),
-            DogecoinTest.get()
+            DogecoinTest.get(),
+            PotcoinMain.get()
     );
 }
