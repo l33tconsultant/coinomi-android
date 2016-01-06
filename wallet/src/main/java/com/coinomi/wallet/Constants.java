@@ -212,7 +212,7 @@ public class Constants {
         COINS_ICONS.put(CoinID.DOGECOINDARK_MAIN.getCoinType(), R.drawable.dogecoindark);
         COINS_ICONS.put(CoinID.CLAMS_MAIN.getCoinType(), R.drawable.clams);
         COINS_ICONS.put(CoinID.GCR_MAIN.getCoinType(), R.drawable.gcr);
-        COINS_ICONS.put(CoinID.POTCOIN_MAIN.getCoinType(), R.drawable.gcr);
+        COINS_ICONS.put(CoinID.POTCOIN_MAIN.getCoinType(), R.drawable.potcoin);
 
         COINS_BLOCK_EXPLORERS = new HashMap<CoinType, String>();
         COINS_BLOCK_EXPLORERS.put(CoinID.BITCOIN_MAIN.getCoinType(), "https://blockchain.info/tx/%s");
@@ -247,7 +247,7 @@ public class Constants {
         COINS_BLOCK_EXPLORERS.put(CoinID.DOGECOINDARK_MAIN.getCoinType(), "http://darkchain.link/tx/%s");
         COINS_BLOCK_EXPLORERS.put(CoinID.CLAMS_MAIN.getCoinType(), "http://khashier.com/tx/%s");
         COINS_BLOCK_EXPLORERS.put(CoinID.GCR_MAIN.getCoinType(), "https://chainz.cryptoid.info/gcr/tx.dws?%s");
-        COINS_BLOCK_EXPLORERS.put(CoinID.POTCOIN_MAIN.getCoinType(), "https://chainz.cryptoid.info/pot/tx.dws?%s.htm");
+        COINS_BLOCK_EXPLORERS.put(CoinID.POTCOIN_MAIN.getCoinType(), "https://chainz.cryptoid.info/pot/tx.dws?%s");
     }
 
     public static final CoinType DEFAULT_COIN = BitcoinMain.get();

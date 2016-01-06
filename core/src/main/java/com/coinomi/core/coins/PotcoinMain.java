@@ -16,7 +16,7 @@ public class PotcoinMain extends CoinType {
         name = "Potcoin";
         symbol = "POT";
         uriScheme = "potcoin";
-        bip44Index = 22;
+        bip44Index = 81;
         unitExponent = 8;
         feePerKb = value(100000);
         minNonDust = value(1000); // 0.00001 MNC mininput
