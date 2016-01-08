@@ -173,8 +173,8 @@ public class Constants {
                                                     new ServerAddress("doged-cce-2.coinomi.net", 5036)),
             new CoinAddress(GcrMain.get(),          new ServerAddress("gcr-cce-1.coinomi.net", 5038),
                                                     new ServerAddress("gcr-cce-2.coinomi.net", 5038)),
-            new CoinAddress(PotcoinMain.get(),      new ServerAddress("10.20.30.37", 50001),
-                                                    new ServerAddress("10.20.30.37", 50001))
+            new CoinAddress(PotcoinMain.get(),      new ServerAddress("elect2.potcoin.com", 50001),
+                                                    new ServerAddress("elect1.potcoin.com", 50001))
     );
 
     public static final HashMap<CoinType, Integer> COINS_ICONS;

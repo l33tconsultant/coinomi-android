@@ -1,6 +1,6 @@
 package com.coinomi.core.coins;
 
-import com.coinomi.core.coins.families.BitFamily;
+import com.coinomi.core.coins.families.ReddFamily;
 
 public class PotcoinMain extends CoinType {
 
@@ -12,15 +12,18 @@ public class PotcoinMain extends CoinType {
         acceptableAddressCodes = new int[] { addressHeader, p2shHeader };
         spendableCoinbaseDepth = 100;
 
-        family = BitFamily.get();
+        transactionVersion = 4;
+        dumpedPrivateKeyHeader = 189;
+
+        family = ReddFamily.get();
         name = "Potcoin";
         symbol = "POT";
         uriScheme = "potcoin";
         bip44Index = 81;
         unitExponent = 8;
         feePerKb = value(100000);
-        minNonDust = value(1000); // 0.00001 MNC mininput
-        softDustLimit = value(100000); // 0.001 MONA
+        minNonDust = value(1000);
+        softDustLimit = value(100000);
         softDustPolicy = SoftDustPolicy.BASE_FEE_FOR_EACH_SOFT_DUST_TXO;
     }
 
