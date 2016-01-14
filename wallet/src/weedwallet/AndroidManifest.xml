@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <application
+        tools:replace="android:icon"
+        android:icon="@drawable/ic_launcher">
+
+        <provider
+            android:name="com.coinomi.wallet.ExchangeRatesProvider"
+            tools:replace="android:authorities"
+            android:authorities="com.passajoint.weedwallet.exchange_rates"
+            android:exported="false" />
+        <provider
+            android:name="com.coinomi.wallet.AddressBookProvider"
+            tools:replace="android:authorities"
+            android:authorities="com.passajoint.weedwallet.address_book"
+            android:exported="false" />
+        <provider
+            android:name="com.coinomi.wallet.ExchangeHistoryProvider"
+            tools:replace="android:authorities"
+            android:authorities="com.passajoint.weedwallet.exchange_history"
+            android:exported="false" />
+
+    </application>
+
+</manifest>
