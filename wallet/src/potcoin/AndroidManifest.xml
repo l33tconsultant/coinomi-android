@@ -9,17 +9,17 @@
         <provider
             android:name="com.coinomi.wallet.ExchangeRatesProvider"
             tools:replace="android:authorities"
-            android:authorities="com.passajoint.weedwallet.exchange_rates"
+            android:authorities="com.potcoin.android.wallet.exchange_rates"
             android:exported="false" />
         <provider
             android:name="com.coinomi.wallet.AddressBookProvider"
             tools:replace="android:authorities"
-            android:authorities="com.passajoint.weedwallet.address_book"
+            android:authorities="com.potcoin.android.wallet.address_book"
             android:exported="false" />
         <provider
             android:name="com.coinomi.wallet.ExchangeHistoryProvider"
             tools:replace="android:authorities"
-            android:authorities="com.passajoint.weedwallet.exchange_history"
+            android:authorities="com.potcoin.android.wallet.exchange_history"
             android:exported="false" />
 
     </application>

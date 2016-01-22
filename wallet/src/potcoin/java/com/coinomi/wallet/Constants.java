@@ -104,9 +104,9 @@ public class Constants {
     public static final char CURRENCY_MINUS_SIGN = '-';
 
     public static final String MARKET_APP_URL = "market://details?id=%s";
-    public static final String BINARY_URL = "https://passajoint.com/weedwallet";
+    public static final String BINARY_URL = "http://potcoin.com/android-coinomi-wallet";
 
-    public static final String VERSION_URL = "https://s3.amazonaws.com/weedwallet/version";
+    public static final String VERSION_URL = "http://potcoin.com/android/version";
 
     // TODO move to resource files
     public static final List<CoinAddress> DEFAULT_COINS_SERVERS = ImmutableList.of(
@@ -173,8 +173,8 @@ public class Constants {
                                                     new ServerAddress("doged-cce-2.coinomi.net", 5036)),
             new CoinAddress(GcrMain.get(),          new ServerAddress("gcr-cce-1.coinomi.net", 5038),
                                                     new ServerAddress("gcr-cce-2.coinomi.net", 5038)),
-            new CoinAddress(PotcoinMain.get(),      new ServerAddress("elect1.potcoin.com", 50001),
-                                                    new ServerAddress("elect2.potcoin.com", 50001))
+            new CoinAddress(PotcoinMain.get(),      new ServerAddress("elect2.potcoin.com", 50001),
+                                                    new ServerAddress("elect1.potcoin.com", 50001))
     );
 
     public static final HashMap<CoinType, Integer> COINS_ICONS;
@@ -258,37 +258,8 @@ public class Constants {
             DogecoinTest.get().getId()
     );
 
-    public static final List<CoinType> SUPPORTED_COINS = ImmutableList.of(
-            BitcoinMain.get(),
-//            DogecoinMain.get(),
-            LitecoinMain.get(),
-//            DashMain.get(),
-//            NuBitsMain.get(),
-//            PeercoinMain.get(),
-//            NamecoinMain.get(),
-//            BlackcoinMain.get(),
-//            ClamsMain.get(),
-//            MonacoinMain.get(),
-//            NuSharesMain.get(),
-//            NovacoinMain.get(),
-//            GcrMain.get(),
-//            VpncoinMain.get(),
-//            VertcoinMain.get(),
-//            ShadowCashMain.get(),
-//            FeathercoinMain.get(),
-//            ReddcoinMain.get(),
-//            DigibyteMain.get(),
-//            RubycoinMain.get(),
-//            DigitalcoinMain.get(),
-//            DogecoindarkMain.get(),
-//            JumbucksMain.get(),
-//            CanadaeCoinMain.get(),
-            CannacoinMain.get(),
-//            NeoscoinMain.get(),
-//            ParkbyteMain.get(),
-//            BitcoinTest.get(),
-//            LitecoinTest.get(),
-//            DogecoinTest.get(),
-            PotcoinMain.get()
-    );
+    public static final List<CoinType> SUPPORTED_COINS = new ArrayList<>();
+    static {
+        SUPPORTED_COINS.add(PotcoinMain.get());
+    }
 }

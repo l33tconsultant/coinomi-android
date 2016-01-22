@@ -30,10 +30,10 @@ android {
     productFlavors {
         coinomi {
         }
-        weedwallet {
-            applicationId 'com.passajoint.weedwallet'
-            versionCode 3
-            versionName 'v4.2.0'
+        potcoin {
+            applicationId 'com.potcoin.android.wallet'
+            versionCode 1
+            versionName 'v1.0'
         }
     }
     lintOptions {
