@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- http://www.google.com/design/spec/style/color.html#color-ui-color-application -->
-    <color name="primary_100">#72f08d</color>
-    <color name="primary_500">#10952d</color>
-    <color name="primary_600">#0d7925</color>
-    <color name="primary_700">#0a5e1c</color>
-    <color name="primary_800">#074214</color>
-    <color name="primary_900">#04260c</color>
+    <color name="primary_100">#48de83</color>
+    <color name="primary_500">#10592d</color>
+    <color name="primary_600">#0b3f20</color>
+    <color name="primary_700">#072513</color>
+    <color name="primary_800">#020b06</color>
+    <color name="primary_900">#000000</color>
     <color name="accent">#B7F7C5</color>
 
-    <color name="send_light">#CF5390</color>
-    <color name="send_normal">#A31259</color>
-    <color name="receive_light">#88cb87</color>
-    <color name="receive_normal">#10952D</color>
+    <color name="send_light">#DE48A2</color>
+    <color name="send_normal">#59103C</color>
+    <color name="receive_light">@color/primary_100</color>
+    <color name="receive_normal">@color/primary_500</color>
 
     <color name="white">#FFFFFF</color>
     <color name="white_almost">#F3F3F3</color>

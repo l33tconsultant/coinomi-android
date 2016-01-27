@@ -32,8 +32,8 @@ android {
         }
         potcoin {
             applicationId 'com.potcoin.android.wallet'
-            versionCode 1
-            versionName 'v1.0'
+            versionCode 3
+            versionName 'v1.02'
         }
     }
     lintOptions {
