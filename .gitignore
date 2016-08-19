@@ -4,3 +4,5 @@
 *.iml
 .DS_Store
 /build
+wallet/wallet-potcoin-release.apk
+wallet/wallet-weedwallet-release.apk
