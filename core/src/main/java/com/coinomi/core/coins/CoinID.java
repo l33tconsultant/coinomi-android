@@ -55,8 +55,6 @@ public enum CoinID {
     CLAMS_MAIN(ClamsMain.get()),
     GCR_MAIN(GcrMain.get()),
     POTCOIN_MAIN(PotcoinMain.get()),
-<<<<<<< HEAD
-=======
     GULDEN_MAIN(GuldenMain.get()),
     AURORACOIN_MAIN(AuroracoinMain.get()),
     BATACOIN_MAIN(BatacoinMain.get()),
@@ -66,7 +64,6 @@ public enum CoinID {
     CLUBCOIN_MAIN(ClubcoinMain.get()),
     RICHCOIN_MAIN(RichcoinMain.get()),
     IXCOIN_MAIN(IxcoinMain.get()),
->>>>>>> 65e16cbc7496c4ad0bab898b6437c180ec9c6175
     ;
 
     private static List<CoinType> types;
