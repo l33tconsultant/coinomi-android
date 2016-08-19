@@ -1,9 +1,9 @@
 package com.coinomi.wallet.ui;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.ContentResolver;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
@@ -31,9 +31,9 @@ import android.widget.Toast;
 
 import com.coinomi.core.coins.CoinType;
 import com.coinomi.core.exchange.shapeshift.ShapeShift;
-import com.coinomi.core.exchange.shapeshift.data.ShapeShiftEmail;
 import com.coinomi.core.exchange.shapeshift.data.ShapeShiftException;
 import com.coinomi.core.exchange.shapeshift.data.ShapeShiftTxStatus;
+import com.coinomi.core.wallet.AbstractAddress;
 import com.coinomi.core.wallet.WalletAccount;
 import com.coinomi.wallet.Constants;
 import com.coinomi.wallet.ExchangeHistoryProvider;
@@ -43,8 +43,6 @@ import com.coinomi.wallet.WalletApplication;
 import com.coinomi.wallet.util.Fonts;
 import com.coinomi.wallet.util.WeakHandler;
 
-import org.bitcoinj.core.Address;
-import org.bitcoinj.core.Transaction;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -74,7 +72,7 @@ public class TradeStatusFragment extends Fragment {
 
     private static final String ARG_SHOW_EXIT_BUTTON = "show_exit_button";
 
-    private Listener mListener;
+    private Listener listener;
     private ContentResolver contentResolver;
     private LoaderManager loaderManager;
     private TextView exchangeInfo;
@@ -101,10 +99,10 @@ public class TradeStatusFragment extends Fragment {
 
     private static class StatusPollTask extends TimerTask {
         private final ShapeShift shapeShift;
-        private final Address depositAddress;
+        private final AbstractAddress depositAddress;
         private final Handler handler;
 
-        private StatusPollTask(ShapeShift shapeShift, Address depositAddress, Handler handler) {
+        private StatusPollTask(ShapeShift shapeShift, AbstractAddress depositAddress, Handler handler) {
             this.shapeShift = shapeShift;
             this.depositAddress = depositAddress;
             this.handler = handler;
@@ -185,7 +183,7 @@ public class TradeStatusFragment extends Fragment {
         Bundle args = getArguments();
         showExitButton = args.getBoolean(ARG_SHOW_EXIT_BUTTON, false);
         exchangeStatus = (ExchangeEntry) args.getSerializable(Constants.ARG_EXCHANGE_ENTRY);
-        Address deposit = exchangeStatus.depositAddress;
+        AbstractAddress deposit = exchangeStatus.depositAddress;
         statusUri = ExchangeHistoryProvider.contentUri(application.getPackageName(), deposit);
         loaderManager.initLoader(ID_STATUS_LOADER, null, statusLoaderCallbacks);
 
@@ -279,8 +277,8 @@ public class TradeStatusFragment extends Fragment {
 
     public void onExitPressed() {
         stopPolling();
-        if (mListener != null) {
-            mListener.onFinish();
+        if (listener != null) {
+            listener.onFinish();
         }
     }
 
@@ -377,8 +375,8 @@ public class TradeStatusFragment extends Fragment {
 
     private void updateViewTransaction() {
         final String txId = exchangeStatus.withdrawTransactionId;
-        final Address withdrawAddress = exchangeStatus.withdrawAddress;
-        final CoinType withdrawType = (CoinType) withdrawAddress.getParameters();
+        final AbstractAddress withdrawAddress = exchangeStatus.withdrawAddress;
+        final CoinType withdrawType = withdrawAddress.getType();
         final List<WalletAccount> accounts = application.getAccounts(withdrawAddress);
 
         if (accounts.size() > 0 || Constants.COINS_BLOCK_EXPLORERS.containsKey(withdrawType)) {
@@ -432,15 +430,15 @@ public class TradeStatusFragment extends Fragment {
     }
 
     @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
+    public void onAttach(final Context context) {
+        super.onAttach(context);
         try {
-            mListener = (Listener) activity;
-            contentResolver = activity.getContentResolver();
-            application = (WalletApplication) activity.getApplication();
+            listener = (Listener) context;
+            contentResolver = context.getContentResolver();
+            application = (WalletApplication) context.getApplicationContext();
             loaderManager = getLoaderManager();
         } catch (ClassCastException e) {
-            throw new ClassCastException(activity.toString()
+            throw new ClassCastException(context.toString()
                     + " must implement " + TradeStatusFragment.Listener.class);
         }
     }
@@ -448,11 +446,11 @@ public class TradeStatusFragment extends Fragment {
     @Override
     public void onDetach() {
         super.onDetach();
-        mListener = null;
+        listener = null;
     }
 
     public interface Listener {
-        public void onFinish();
+        void onFinish();
     }
 
     private final LoaderCallbacks<Cursor> statusLoaderCallbacks = new LoaderCallbacks<Cursor>() {
@@ -474,25 +472,26 @@ public class TradeStatusFragment extends Fragment {
         @Override public void onLoaderReset(final Loader<Cursor> loader) { }
     };
 
-    private DialogFragment emailReceiptDialog = new DialogFragment() {
-        @Override @NonNull
-        public Dialog onCreateDialog(Bundle savedInstanceState) {
-            final LayoutInflater inflater = LayoutInflater.from(getActivity());
-            final View view = inflater.inflate(R.layout.email_receipt_dialog, null);
-            final TextView emailView = (TextView) view.findViewById(R.id.email);
-
-            return new DialogBuilder(getActivity())
-                    .setTitle(R.string.email_receipt_title)
-                    .setView(view)
-                    .setNegativeButton(R.string.button_cancel, null)
-                    .setPositiveButton(R.string.button_add, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            // TODO implement async task
-                            String email = emailView.getText().toString();
-//                            ShapeShiftEmail reply = application.getShapeShift().requestEmailReceipt(email, exchangeStatus.getShapeShiftTxStatus());
-                        }
-                    }).create();
-        }
-    };
+//    TODO implement
+//    private DialogFragment emailReceiptDialog = new DialogFragment() {
+//        @Override @NonNull
+//        public Dialog onCreateDialog(Bundle savedInstanceState) {
+//            final LayoutInflater inflater = LayoutInflater.from(getActivity());
+//            final View view = inflater.inflate(R.layout.email_receipt_dialog, null);
+//            final TextView emailView = (TextView) view.findViewById(R.id.email);
+//
+//            return new DialogBuilder(getActivity())
+//                    .setTitle(R.string.email_receipt_title)
+//                    .setView(view)
+//                    .setNegativeButton(R.string.button_cancel, null)
+//                    .setPositiveButton(R.string.button_add, new DialogInterface.OnClickListener() {
+//                        @Override
+//                        public void onClick(DialogInterface dialog, int which) {
+//                            // TODO implement async task
+//                            String email = emailView.getText().toString();
+////                            ShapeShiftEmail reply = application.getShapeShift().requestEmailReceipt(email, exchangeStatus.getShapeShiftTxStatus());
+//                        }
+//                    }).create();
+//        }
+//    };
 }
