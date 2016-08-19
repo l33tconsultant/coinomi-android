@@ -1,5 +1,6 @@
 package com.coinomi.core.coins;
 
+import com.coinomi.core.coins.families.Families;
 import com.coinomi.core.util.Currencies;
 import com.coinomi.core.util.MonetaryFormat;
 
@@ -42,6 +43,11 @@ public class FiatType implements ValueType {
     }
 
     @Override
+    public String getId() {
+        return getSymbol();
+    }
+
+    @Override
     public String getName() {
         return name;
     }
@@ -66,7 +72,7 @@ public class FiatType implements ValueType {
     }
 
     @Override
-    public Value minNonDust() {
+    public Value getMinNonDust() {
         return value(1);
     }
 

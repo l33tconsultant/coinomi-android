@@ -15,8 +15,10 @@ import android.preference.PreferenceManager;
 import android.widget.Toast;
 
 import com.coinomi.core.coins.CoinType;
+import com.coinomi.core.coins.Value;
 import com.coinomi.core.exchange.shapeshift.ShapeShift;
 import com.coinomi.core.util.HardwareSoftwareCompliance;
+import com.coinomi.core.wallet.AbstractAddress;
 import com.coinomi.core.wallet.Wallet;
 import com.coinomi.core.wallet.WalletAccount;
 import com.coinomi.core.wallet.WalletProtobufSerializer;
@@ -26,11 +28,11 @@ import com.coinomi.wallet.util.Fonts;
 import com.coinomi.wallet.util.LinuxSecureRandom;
 import com.coinomi.wallet.util.NetworkUtils;
 import com.google.common.collect.ImmutableList;
+import com.google.common.io.Files;
 
 import org.acra.ACRA;
 import org.acra.annotation.ReportsCrashes;
 import org.acra.sender.HttpSender;
-import org.bitcoinj.core.Address;
 import org.bitcoinj.crypto.MnemonicCode;
 import org.bitcoinj.store.UnreadableWalletException;
 import org.slf4j.Logger;
@@ -52,8 +54,7 @@ import javax.annotation.Nullable;
 @ReportsCrashes(
         // Also uncomment ACRA.init(this) in onCreate
         httpMethod = HttpSender.Method.PUT,
-        reportType = HttpSender.Type.JSON,
-        formKey = ""
+        reportType = HttpSender.Type.JSON
 )
 public class WalletApplication extends Application {
     private static final Logger log = LoggerFactory.getLogger(WalletApplication.class);
@@ -70,11 +71,12 @@ public class WalletApplication extends Application {
     @Nullable
     private Wallet wallet;
     private PackageInfo packageInfo;
+    private String versionString;
 
     private long lastStop;
-
     private ConnectivityManager connManager;
     private ShapeShift shapeShift;
+    private File txCachePath;
 
     @Override
     public void onCreate() {
@@ -94,7 +96,8 @@ public class WalletApplication extends Application {
         super.onCreate();
 
         packageInfo = packageInfoFromContext(this);
-
+        versionString = packageInfo.versionName.replace(" ", "_") + "__" +
+                packageInfo.packageName + "_android";
 
         activityManager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
 
@@ -103,6 +106,8 @@ public class WalletApplication extends Application {
                 null, this, CoinServiceImpl.class);
         coinServiceCancelCoinsReceivedIntent = new Intent(CoinService.ACTION_CANCEL_COINS_RECEIVED,
                 null, this, CoinServiceImpl.class);
+
+        createTxCache();
 
         // Set MnemonicCode.INSTANCE if needed
         if (MnemonicCode.INSTANCE == null) {
@@ -115,7 +120,6 @@ public class WalletApplication extends Application {
 
         config.updateLastVersionCode(packageInfo.versionCode);
 
-
         connManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
 
         walletFile = getFileStreamPath(Constants.WALLET_FILENAME_PROTOBUF);
@@ -124,6 +128,29 @@ public class WalletApplication extends Application {
         afterLoadWallet();
 
         Fonts.initFonts(this.getAssets());
+    }
+
+    private void createTxCache() {
+        txCachePath = new File(this.getCacheDir(), Constants.TX_CACHE_NAME);
+        if (!txCachePath.exists()) {
+            if (!txCachePath.mkdirs()) {
+                txCachePath = null;
+                log.error("Error creating transaction cache folder");
+                return;
+            }
+        }
+
+        // Make cache dirs for all coins
+        for (CoinType type : Constants.SUPPORTED_COINS) {
+            File coinCachePath = new File(txCachePath, type.getId());
+            if (!coinCachePath.exists()) {
+                if (!coinCachePath.mkdirs()) {
+                    txCachePath = null;
+                    log.error("Error creating transaction cache folder");
+                    return;
+                }
+            }
+        }
     }
 
     public boolean isConnected() {
@@ -138,18 +165,27 @@ public class WalletApplication extends Application {
         return shapeShift;
     }
 
+    public File getTxCachePath() {
+        return txCachePath;
+    }
+
     /**
      * Some devices have software bugs that causes the EC crypto to malfunction.
      */
     private void performComplianceTests() {
-        if (!HardwareSoftwareCompliance.isEllipticCurveCryptographyCompliant()) {
-            config.setDeviceCompatible(false);
-            ACRA.getErrorReporter().handleSilentException(
-                    new Exception("Device failed EllipticCurveCryptographyCompliant test"));
+        if (!config.isDeviceCompatible()) {
+            if (!HardwareSoftwareCompliance.isEllipticCurveCryptographyCompliant()) {
+                config.setDeviceCompatible(false);
+                ACRA.getErrorReporter().handleSilentException(
+                        new Exception("Device failed EllipticCurveCryptographyCompliant test"));
+            } else {
+                config.setDeviceCompatible(true);
+            }
         }
     }
 
     private void afterLoadWallet() {
+        setupFeeProvider();
 //        wallet.autosaveToFile(walletFile, 1, TimeUnit.SECONDS, new WalletAutosaveEventListener());
 //
         // clean up spam
@@ -158,6 +194,15 @@ public class WalletApplication extends Application {
 //        ensureKey();
 //
 //        migrateBackup();
+    }
+
+    private void setupFeeProvider() {
+        CoinType.setFeeProvider(new CoinType.FeeProvider() {
+            @Override
+            public Value getFeeValue(CoinType type) {
+                return config.getFeeValue(type);
+            }
+        });
     }
 
     private void initLogging() {
@@ -247,7 +292,7 @@ public class WalletApplication extends Application {
         }
     }
 
-    public List<WalletAccount> getAccounts(Address address) {
+    public List<WalletAccount> getAccounts(AbstractAddress address) {
         if (wallet != null) {
             return wallet.getAccounts(address);
         } else {
@@ -311,11 +356,11 @@ public class WalletApplication extends Application {
 
                 log.info("wallet loaded from: '" + walletFile + "', took " + (System.currentTimeMillis() - start) + "ms");
             } catch (final FileNotFoundException e) {
-                Toast.makeText(WalletApplication.this, R.string.error_could_not_read_wallet, Toast.LENGTH_LONG).show();
                 ACRA.getErrorReporter().handleException(e);
+                Toast.makeText(WalletApplication.this, R.string.error_could_not_read_wallet, Toast.LENGTH_LONG).show();
             } catch (final UnreadableWalletException e) {
-                ACRA.getErrorReporter().handleException(e);
                 Toast.makeText(WalletApplication.this, R.string.error_could_not_read_wallet, Toast.LENGTH_LONG).show();
+                ACRA.getErrorReporter().handleException(e);
             } finally {
                 if (walletStream != null) {
                     try {
@@ -366,6 +411,10 @@ public class WalletApplication extends Application {
 
     public PackageInfo packageInfo() {
         return packageInfo;
+    }
+
+    public String getVersionString() {
+        return versionString;
     }
 
     public void touchLastResume() {

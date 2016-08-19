@@ -1,23 +1,23 @@
 package com.coinomi.core.coins.families;
 
+import com.coinomi.core.messages.MessageFactory;
+import com.coinomi.core.wallet.families.clams.ClamsTxMessage;
+
+import javax.annotation.Nullable;
+
 /**
  * @author John L. Jegutanis
  *
  * This family contains Clams
  */
-final public class ClamsFamily implements CoinFamily {
-    private final static CoinFamily instance = new ClamsFamily();
-    public static synchronized CoinFamily get() {
-        return instance;
+public class ClamsFamily extends BitFamily {
+    {
+        family = Families.CLAMS;
     }
 
     @Override
-    public String toString() {
-        return "clams";
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        return obj != null && obj instanceof ClamsFamily && toString().equals(obj.toString());
+    @Nullable
+    public MessageFactory getMessagesFactory() {
+        return ClamsTxMessage.getFactory();
     }
 }

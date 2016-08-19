@@ -1,14 +1,11 @@
 package com.coinomi.core.coins;
 
-import com.coinomi.core.coins.families.BitFamily;
 import com.coinomi.core.coins.families.ReddFamily;
-
-import org.bitcoinj.core.Coin;
 
 /**
  * @author John L. Jegutanis
  */
-public class ReddcoinMain extends CoinType {
+public class ReddcoinMain extends ReddFamily {
     private ReddcoinMain() {
         id = "reddcoin.main";
 
@@ -19,13 +16,12 @@ public class ReddcoinMain extends CoinType {
         dumpedPrivateKeyHeader = 189;
         transactionVersion = 2;
 
-        family = ReddFamily.get();
         name = "Reddcoin";
         symbol = "RDD";
         uriScheme = "reddcoin";
         bip44Index = 4;
         unitExponent = 8;
-        feePerKb = value(100000);
+        feeValue = value(100000);
         minNonDust = value(1000000);   // 0.01 RDD mininput
         softDustLimit = value(100000000); // 1 RDD
         softDustPolicy = SoftDustPolicy.BASE_FEE_FOR_EACH_SOFT_DUST_TXO;
@@ -33,7 +29,7 @@ public class ReddcoinMain extends CoinType {
     }
 
     private static ReddcoinMain instance = new ReddcoinMain();
-    public static synchronized ReddcoinMain get() {
+    public static synchronized CoinType get() {
         return instance;
     }
 }
