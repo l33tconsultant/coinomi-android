@@ -1,9 +1,9 @@
 package com.coinomi.core.coins;
 
+import com.coinomi.core.exceptions.AddressMalformedException;
 import com.coinomi.core.util.GenericUtils;
 import com.google.common.collect.ImmutableList;
 
-import org.bitcoinj.core.AddressFormatException;
 import org.bitcoinj.core.NetworkParameters;
 import org.bitcoinj.params.Networks;
 
@@ -28,7 +28,6 @@ public enum CoinID {
     LITECOIN_TEST(LitecoinTest.get()),
     DOGECOIN_MAIN(DogecoinMain.get()),
     DOGECOIN_TEST(DogecoinTest.get()),
-    CANADAECOIN_MAIN(CanadaeCoinMain.get()),
     REDDCOIN_MAIN(ReddcoinMain.get()),
     PEERCOIN_MAIN(PeercoinMain.get()),
     DASH_MAIN(DashMain.get()),
@@ -44,15 +43,27 @@ public enum CoinID {
     DIGIBYTE_MAIN(DigibyteMain.get()),
     NEOSCOIN_MAIN(NeoscoinMain.get()),
     VERTCOIN_MAIN(VertcoinMain.get()),
+    NXT_MAIN(NxtMain.get()),
+    BURST_MAIN(BurstMain.get()),
     JUMBUCKS_MAIN(JumbucksMain.get()),
     VPNCOIN_MAIN(VpncoinMain.get()),
     NOVACOIN_MAIN(NovacoinMain.get()),
     SHADOWCASH_MAIN(ShadowCashMain.get()),
+    CANADAECOIN_MAIN(CanadaeCoinMain.get()),
     PARKBYTE_MAIN(ParkbyteMain.get()),
-    DOGECOINDARK_MAIN(DogecoindarkMain.get()),
+    VERGE_MAIN(VergeMain.get()),
     CLAMS_MAIN(ClamsMain.get()),
     GCR_MAIN(GcrMain.get()),
     POTCOIN_MAIN(PotcoinMain.get()),
+    GULDEN_MAIN(GuldenMain.get()),
+    AURORACOIN_MAIN(AuroracoinMain.get()),
+    BATACOIN_MAIN(BatacoinMain.get()),
+    OKCASH_MAIN(OKCashMain.get()),
+    ASIACOIN_MAIN(AsiacoinMain.get()),
+    EGULDEN_MAIN(EguldenMain.get()),
+    CLUBCOIN_MAIN(ClubcoinMain.get()),
+    RICHCOIN_MAIN(RichcoinMain.get()),
+    IXCOIN_MAIN(IxcoinMain.get()),
     ;
 
     private static List<CoinType> types;
@@ -125,8 +136,9 @@ public enum CoinID {
     }
 
     public static List<CoinType> fromUri(String input) {
+        String inputLowercase = input.toLowerCase();
         for (String uri : uriLookup.keySet()) {
-            if (input.startsWith(uri + "://") || input.startsWith(uri + ":")) {
+            if (inputLowercase.startsWith(uri + "://") || inputLowercase.startsWith(uri + ":")) {
                 return uriLookup.get(uri);
             }
         }
@@ -134,14 +146,15 @@ public enum CoinID {
     }
 
     public static List<CoinType> fromUriScheme(String scheme) {
-        if (uriLookup.containsKey(scheme)) {
-            return uriLookup.get(scheme);
+        String schemeLowercase = scheme.toLowerCase();
+        if (uriLookup.containsKey(schemeLowercase)) {
+            return uriLookup.get(schemeLowercase);
         } else {
             throw new IllegalArgumentException("Unsupported URI scheme: " + scheme);
         }
     }
 
-    public static List<CoinType> typesFromAddress(String address) throws AddressFormatException {
+    public static List<CoinType> typesFromAddress(String address) throws AddressMalformedException {
         return GenericUtils.getPossibleTypes(address);
     }
 

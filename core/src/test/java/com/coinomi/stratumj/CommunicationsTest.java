@@ -43,7 +43,7 @@ public class CommunicationsTest {
     private PipedOutputStream serverOutput;
 
     public CommunicationsTest() {
-//		System.setProperty(org.slf4j.impl.SimpleLogger.DEFAULT_LOG_LEVEL_KEY, "TRACE");
+//        System.setProperty(org.slf4j.impl.SimpleLogger.DEFAULT_LOG_LEVEL_KEY, "TRACE");
         BriefLogFormatter.init();
     }
 
