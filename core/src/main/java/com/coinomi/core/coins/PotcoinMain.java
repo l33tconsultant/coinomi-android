@@ -17,7 +17,7 @@ public class PotcoinMain extends ReddFamily {
         transactionVersion = 4;
         dumpedPrivateKeyHeader = 189;
 
-        name = "Potcoin (beta)";
+        name = "Potcoin";
         symbol = "POT";
         uriScheme = "potcoin";
         bip44Index = 81;
